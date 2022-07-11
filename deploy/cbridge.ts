@@ -19,6 +19,11 @@ import {
 import { BigNumber } from "ethers";
 import { cBridgeMessageBusABI } from "../scripts/abi/cbridgeMessageBus.abi";
 import { getAllMultichainRouters, getTokenInfo } from "../scripts/multichain";
+import {
+  deployMultichain,
+  deployRangoCBridge,
+  deployRangoV1,
+} from "../scripts/creations";
 
 async function setMultichainRouters(hre: HardhatRuntimeEnvironment) {
   const rangoMultichain = await getContract(hre, Contracts.RANGO_MULTICHAIN);
@@ -38,24 +43,28 @@ export async function setFeeWalletOnlyRango(hre: HardhatRuntimeEnvironment) {
   await (await rangoV1.updateFeeContractAddress(feeWallet)).wait(1);
 }
 
-export async function whiteListContracts(hre: HardhatRuntimeEnvironment, rango: boolean, cbridge: boolean) {
+export async function whiteListContracts(
+  hre: HardhatRuntimeEnvironment,
+  rango: boolean,
+  cbridge: boolean
+) {
   const rangoV1 = await getContract(hre, Contracts.RANGO_V1);
   const rangoCBridge = await getContract(hre, Contracts.RANGO_CBRIDGE);
   const { validContracts, validMessagingDApps } = networkConfig[chainId()];
   for (const c of validContracts) {
     if (rango) {
-        console.log(`whitelisting ${c} for rangoV1 ...`);
-        await (await rangoV1.addWhitelist(c)).wait(2);
+      console.log(`whitelisting ${c} for rangoV1 ...`);
+      await (await rangoV1.addWhitelist(c)).wait(2);
     }
     if (cbridge) {
-        console.log(`whitelisting ${c} for rangoCBridge ...`);
-        await (await rangoCBridge.addWhitelist(c, false)).wait(2);
+      console.log(`whitelisting ${c} for rangoCBridge ...`);
+      await (await rangoCBridge.addWhitelist(c, false)).wait(2);
     }
   }
   for (const c of validMessagingDApps) {
     if (cbridge) {
-        console.log(`whitelisting dapp ${c} for rangoCBridge ...`);
-        await (await rangoCBridge.addWhitelist(c, true)).wait(2);
+      console.log(`whitelisting dapp ${c} for rangoCBridge ...`);
+      await (await rangoCBridge.addWhitelist(c, true)).wait(2);
     }
   }
 }
@@ -66,17 +75,15 @@ async function setCBridge(hre: HardhatRuntimeEnvironment) {
   const { cBridgeContract, cBridgeIMMessageBus } = networkConfig[chainId()];
 
   const tx1 = await rangoCBridge.updateCBridgeAddress(cBridgeContract);
-  await tx1.wait(1);
+  await tx1.wait(2);
   console.log(`cBridge contract address set to ${cBridgeContract}`);
 
-  const tx2 = await rangoCBridge.updateCBridgeMessageBusSenderAddress(
-    cBridgeIMMessageBus
-  );
-  await tx2.wait(1);
+  const tx2 = await rangoCBridge.setMessageBus(cBridgeIMMessageBus);
+  await tx2.wait(2);
   console.log(`cBridge message bus set to ${cBridgeIMMessageBus}`);
 
   const tx3 = await rangoV1.updateRangoCBridgeAddress(rangoCBridge.address);
-  await tx3.wait(1);
+  await tx3.wait(2);
   console.log(`RangoV1.updateRangoCBridgeAddress => ${rangoCBridge.address}`);
 }
 
@@ -94,7 +101,7 @@ async function doOnChainSwap(hre: HardhatRuntimeEnvironment) {
     uniswapDexSample,
   } = await getSwapRequest(hre, "token1SwapAmount");
   const isSourceNative = false;
-  const isDestNative = true;
+  const isDestNative = false;
 
   const swaps = getSwaps(
     rangoV1.address,
@@ -113,19 +120,6 @@ async function doOnChainSwap(hre: HardhatRuntimeEnvironment) {
       )
     : ethers.BigNumber.from("0");
 
-  console.log(
-    [
-      isSourceNative ? NATIVE_ADDRESS : token1Address,
-      isDestNative ? NATIVE_ADDRESS : token2Address,
-      token1SwapAmount,
-      rangoFee,
-      affiliatorFee,
-      affiliatorWallet,
-    ],
-    swaps,
-    true,
-    { value }
-  );
   const tx = await rangoV1.onChainSwaps(
     [
       isSourceNative ? NATIVE_ADDRESS : token1Address,
@@ -136,7 +130,7 @@ async function doOnChainSwap(hre: HardhatRuntimeEnvironment) {
       affiliatorWallet,
     ],
     swaps,
-    true,
+    false,
     { value }
   );
   await tx.wait(1);
@@ -191,7 +185,7 @@ async function doOnChainSwapAndCbridgeIM(
     deployer, // address originalSender
     deployer, // address recipient
 
-    ethers.utils.arrayify('0x'),
+    ethers.utils.arrayify("0x"),
     NATIVE_ADDRESS,
     NATIVE_ADDRESS,
     // ethers.utils.arrayify('0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000007E8A8b130272430008eCa062419ACD8B423d339D'),
@@ -324,23 +318,23 @@ async function doOnChainSwapAndMultichain(
 }
 
 const func = async function (hre: HardhatRuntimeEnvironment) {
-//   const rangoV1Address = await deployRangoV1(hre, true);
-//   console.log({ rangoV1Address });
-//
-//   const rangoCBridgeAddress = await deployRangoCBridge(hre, true);
-//   console.log({ rangoCBridgeAddress });
-
-//   const rangoMultichainAddress = await deployMultichain(hre, false);
-//   console.log({ rangoMultichainAddress });
-//
-//   await setMultichainRouters(hre);
-//
-//   await setFeeWalletOnlyRango(hre);
-//   await whiteListContracts(hre, false, true);
-//   await setCBridge(hre);
+  // const rangoV1Address = await deployRangoV1(hre, true);
+  // console.log({ rangoV1Address });
+  //
+  // const rangoCBridgeAddress = await deployRangoCBridge(hre, true);
+  // console.log({ rangoCBridgeAddress });
+  //
+  // const rangoMultichainAddress = await deployMultichain(hre, false);
+  // console.log({ rangoMultichainAddress });
+  //
+  // await setMultichainRouters(hre);
+  //
+  // await setFeeWalletOnlyRango(hre);
+  // await whiteListContracts(hre, true, true);
+  // await setCBridge(hre);
 
   // await doOnChainSwap(hre);
-//   await doOnChainSwapAndCbridgeIM(hre, true);
+  //   await doOnChainSwapAndCbridgeIM(hre, true);
   // await doOnChainSwapAndMultichain(hre, false);
   await printContracts(hre);
 };

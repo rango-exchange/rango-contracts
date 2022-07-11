@@ -284,27 +284,21 @@ async function swapOutThorchainAggUniV3(hre: HardhatRuntimeEnvironment) {
 }
 
 const func = async function (hre: HardhatRuntimeEnvironment) {
-    const rangoV1Address = await deployRangoV1(hre, false);
-    console.log({ rangoV1Address });
-
-  const { deployer } = await hre.getNamedAccounts();
-  console.log({ deployer });
-
+  // const rangoV1Address = await deployRangoV1(hre, false);
+  // console.log({ rangoV1Address });
+  // const { deployer } = await hre.getNamedAccounts();
+  // console.log({ deployer });
   // const rangoCBridgeAddress = await deployRangoCBridge(hre);
   // console.log({ rangoCBridgeAddress });
-
-  const rangoThorchain = await deployRangoThorchain(hre, false);
-  console.log({ rangoThorchain });
-
-  const rangoThorchainUniV2 = await deployRangoThorchainOutputRouterUniV2(hre);
-  console.log({ rangoThorchainUniV2 });
-
-  const rangoThorchainUniV3 = await deployRangoThorchainOutputRouterUniV3(
-    hre,
-    3000,
-  );
-  console.log({ rangoThorchainUniV3 });
-
+  // const rangoThorchain = await deployRangoThorchain(hre, false);
+  // console.log({ rangoThorchain });
+  // const rangoThorchainUniV2 = await deployRangoThorchainOutputRouterUniV2(hre);
+  // console.log({ rangoThorchainUniV2 });
+  // const rangoThorchainUniV3 = await deployRangoThorchainOutputRouterUniV3(
+  //   hre,
+  //   3000
+  // );
+  // console.log({ rangoThorchainUniV3 });
   // await whiteListContracts(hre,true,false);
   // await setFeeWalletOnlyRango(hre);
   // await setThorchain(hre);

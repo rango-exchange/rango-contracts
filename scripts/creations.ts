@@ -1,4 +1,3 @@
-import { network } from "hardhat";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { networkConfig } from "../network.config";
 import { chainId, Contracts, getContract } from "./common";

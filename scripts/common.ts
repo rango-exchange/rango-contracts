@@ -65,7 +65,7 @@ export const CBRIDGE_MESSAGE_BUS_ABI = [
   "address",
   "bytes",
   "address",
-  "address"
+  "address",
 ];
 
 export const SWAP_UNI_NON_NATIVE_ABI = [

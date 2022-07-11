@@ -12,6 +12,7 @@ export const networkConfig: any = {
       "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D", // uniswap router v2
       "0xE592427A0AEce92De3Edee1F18E0157C05861564", // uniswap swaprouter v3
       "0x1111111254fb6c44bAC0beD2854e76F90643097d", // 1inch
+      "0x1116898DdA4015eD8dDefb84b6e8Bc24528Af2d8", // synapse swapper
     ],
     wrappedToken: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
     feeWallet: FEE_WALLET_ADDRESS,
@@ -23,7 +24,9 @@ export const networkConfig: any = {
     uniswapRouterV3: "0xE592427A0AEce92De3Edee1F18E0157C05861564",
   },
   1285: { // moonriver
-    validContracts: ['0xAA30eF758139ae4a7f798112902Bf6d65612045f'],
+    validContracts: [
+      '0xAA30eF758139ae4a7f798112902Bf6d65612045f', // solarbeam
+    ],
     wrappedToken: "0x98878B06940aE243284CA214f92Bb71a2b032B8A",
     feeWallet: FEE_WALLET_ADDRESS,
     affiliatorWallet: FEE_WALLET_ADDRESS,
@@ -44,6 +47,7 @@ export const networkConfig: any = {
     validContracts: [
         "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506", // sushi
         "0x1111111254fb6c44bac0bed2854e76f90643097d", // 1inch
+        "0x9Dd329F5411466d9e0C488fF72519CA9fEf0cb40", // synapse swapper
     ],
     wrappedToken: "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
     feeWallet: FEE_WALLET_ADDRESS,
@@ -51,11 +55,12 @@ export const networkConfig: any = {
     cBridgeContract: "0x1619DE6B6B20eD217a58d00f37B9d47C7663feca",
     cBridgeIMMessageBus: "0x3ad9d0648cdaa2426331e894e980d0a5ed16257f",
   },
-  137: {
+  137: { // polygon
     validContracts: [
         "0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff", // quick swap
         "0x1111111254fb6c44bac0bed2854e76f90643097d", // 1inch
         "0xDEF171Fe48CF0115B1d80b88dc8eAB59176FEe57", // paraswap
+        "0x85fCD7Dd0a1e1A9FCD5FD886ED522dE8221C3EE5", // synapse swapper
     ],
     wrappedToken: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
     feeWallet: FEE_WALLET_ADDRESS,
@@ -67,6 +72,7 @@ export const networkConfig: any = {
     validContracts: [
         "0xE54Ca86531e17Ef3616d22Ca28b0D458b6C89106", // pangolin
         "0xDEF171Fe48CF0115B1d80b88dc8eAB59176FEe57", // paraswap
+        "0xED2a7edd7413021d440b09D654f3b87712abAB66", // synapse swapper
     ],
     wrappedToken: "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7",
     feeWallet: FEE_WALLET_ADDRESS,
@@ -74,7 +80,7 @@ export const networkConfig: any = {
     cBridgeContract: "0xef3c714c9425a8F3697A9C969Dc1af30ba82e5d4",
     cBridgeIMMessageBus: "0x5a926eeeafc4d217add17e9641e8ce23cd01ad57",
   },
-  250: {
+  250: { // fantom
     rangoCBridge: "INVALID",
     validContracts: [
         "0xf491e7b69e4244ad4002bc14e878a34207e38c29", // spooky
@@ -107,11 +113,13 @@ export const networkConfig: any = {
       destChainId: 56,
     },
   },
-  56: {
+  56: { // bsc
     rangoCBridge: "INVALID",
     validContracts: [
       "0x10ED43C718714eb63d5aA57B78B54704E256024E", // pancake
       "0x1111111254fb6c44bac0bed2854e76f90643097d", // 1inch
+      "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506", // sushi
+      "0x28ec0B36F0819ecB5005cAB836F4ED5a2eCa4D13", // synapse swapper
     ],
     validMessagingDApps: [
     ],
@@ -141,7 +149,7 @@ export const networkConfig: any = {
       destChainId: 250,
     },
   },
-  3: {
+  3: { // ropsten
     validContracts: ["0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"],
     wrappedToken: "0xc778417e063141139fce010982780140aa0cd5ab",
     feeWallet: FEE_WALLET_ADDRESS,
