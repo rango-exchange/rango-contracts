@@ -151,32 +151,34 @@ contract RangoCBridge is IRangoCBridge, MessageSenderApp, MessageReceiverApp, Ba
         address // executor
     ) external payable override onlyMessageBus returns (ExecutionStatus) {
         RangoCBridgeModels.RangoCBridgeInterChainMessage memory m = abi.decode((_message), (RangoCBridgeModels.RangoCBridgeInterChainMessage));
-        if (m.bridgeNativeOut) {
-            _sendToken(
-                NULL_ADDRESS,
-                _amount,
-                m.originalSender,
-                true,
-                false,
-                m.dAppMessage,
-                m.dAppSourceContract,
-                IRangoMessageReceiver.ProcessStatus.REFUND_IN_SOURCE
-            );
-        } else {
-            _sendToken(
-                _token,
-                _amount,
-                m.originalSender,
-                false,
-                false,
-                m.dAppMessage,
-                m.dAppSourceContract,
-                IRangoMessageReceiver.ProcessStatus.REFUND_IN_SOURCE
-            );
+
+        BaseContractStorage storage baseStorage = getBaseContractStorage();
+        address fromToken = _token;
+        bool nativeOut = false;
+        if (_token == baseStorage.nativeWrappedAddress) {
+            if (IERC20(_token).balanceOf(address(this)) < _amount) {
+                if (address(this).balance >= _amount) {
+                    nativeOut = true;
+                    fromToken = NULL_ADDRESS;
+                } else {
+                    revert("Neither WETH nor ETH were found on contract");
+                }
+            }
         }
+        
+        _sendToken(
+            fromToken,
+            _amount,
+            m.originalSender,
+            nativeOut,
+            false,
+            m.dAppMessage,
+            m.dAppSourceContract,
+            IRangoMessageReceiver.ProcessStatus.REFUND_IN_SOURCE
+        );
 
         bytes32 id = _computeSwapRequestId(m.originalSender, uint64(block.chainid), m.dstChainId, _message);
-        emit CBridgeIMStatusUpdated(id, _token, _amount, OperationStatus.RefundInSource, m.originalSender);
+        emit CBridgeIMStatusUpdated(id, fromToken, _amount, OperationStatus.RefundInSource, m.originalSender);
 
         return ExecutionStatus.Success;
     }
